@@ -12,6 +12,7 @@ from pathlib import Path
 
 from parameter_manager import ParameterManager
 from cam_manager import CAMManager
+from post_processor import PostProcessor
 from logger import get_logger
 
 
@@ -283,14 +284,69 @@ class OrderProcessor:
                 
                 return False, f'{comp_id}: Toolpath regeneration failed: {regen_msg}'
             
+            # Phase 4: Post process all setups to generate G-code
+            self.logger.info(f'{comp_id}: Starting post processing')
+            
+            # Get output directory - hardcoded for now, could be from JSON later
+            output_dir = r'C:\Users\james.derrod\OneDrive - Bobrick Washroom Equipment\Documents\Fusion 360\NC Programs'
+            
+            post_proc = PostProcessor(self.app, output_dir)
+            
+            # Get all setups for post processing
+            all_setups = cam_mgr.get_all_setups()
+            
+            # Show starting message
+            self.ui.messageBox(
+                f'Toolpaths regenerated successfully!\n\nStarting post processing for {len(all_setups)} setup(s)...',
+                'Post Processing',
+                adsk.core.MessageBoxButtonTypes.OKButtonType,
+                adsk.core.MessageBoxIconTypes.InformationIconType
+            )
+            
+            # Post process all setups
+            post_success, post_msg, post_results = post_proc.post_process_all_setups(cam_mgr.cam_product, all_setups)
+            
+            # Log post processing results
+            for setup_name, success, msg, file_path in post_results:
+                if success:
+                    self.logger.info(f'{comp_id}: Post "{setup_name}": {msg}')
+                else:
+                    self.logger.error(f'{comp_id}: Post "{setup_name}": {msg}')
+            
+            # Check if at least some setups posted successfully
+            successful_posts = [r for r in post_results if r[1]]
+            
+            if not successful_posts:
+                # All post processing failed - this is an error
+                self.logger.error(f'{comp_id}: All post processing failed')
+                
+                error_details = '\n'.join([f'  • {name}: {msg}' for name, success, msg, _ in post_results if not success])
+                self.ui.messageBox(
+                    f'{comp_id}: Post processing FAILED!\n\n{post_msg}\n\n{error_details}',
+                    'Post Processing Failed',
+                    adsk.core.MessageBoxButtonTypes.OKButtonType,
+                    adsk.core.MessageBoxIconTypes.CriticalIconType
+                )
+                
+                return False, f'{comp_id}: Post processing failed: {post_msg}'
+            
             # Success! Show final results
             self.logger.info(f'{comp_id}: All operations complete')
             
             final_msg = f'{comp_id}: Processing complete!\n\n'
             final_msg += f'✓ Updated {len(parameters)} parameter(s)\n'
-            final_msg += f'✓ Regenerated {len(setup_names)} CAM setup(s):\n'
-            for name in setup_names:
-                final_msg += f'    • {name}\n'
+            final_msg += f'✓ Regenerated {len(setup_names)} CAM setup(s)\n'
+            final_msg += f'✓ Generated {len(successful_posts)}/{len(all_setups)} NC program(s):\n'
+            
+            for setup_name, success, msg, file_path in post_results:
+                if success:
+                    # Extract just filename from path
+                    filename = os.path.basename(file_path) if file_path else 'unknown'
+                    final_msg += f'    • {setup_name}: {filename}\n'
+                else:
+                    final_msg += f'    • {setup_name}: FAILED ({msg})\n'
+            
+            final_msg += f'\nOutput: {output_dir}'
             
             self.ui.messageBox(
                 final_msg,
@@ -299,7 +355,7 @@ class OrderProcessor:
                 adsk.core.MessageBoxIconTypes.InformationIconType
             )
             
-            return True, f'{comp_id}: Parameters and toolpaths updated successfully'
+            return True, f'{comp_id}: Complete - {len(successful_posts)} NC file(s) generated'
             
         except Exception as e:
             return False, f'{comp_id}: Exception: {str(e)}'

@@ -1,0 +1,8 @@
+Name,Unit,Expression,Value,Comments,Favorite
+component_height,in,96 in,96.00,height of the component in inches,true
+component_width,in,50 in,50.00,width of the component in inches,true
+component_floor_clearance,in,1 in,1.00,floor clearance of the component in inches,true
+door_hinging_right,,1,1,relative to room - 0 = False / 1 = True,true
+door_swinging_out,,1,1,relative to cabin - 0 = False / 1 = True,true
+door_wall_post_hinging,,0,0,0 = False / 1 = True,true
+door_wall_keep_latching,,0,0,0 = False / 1 = True,true

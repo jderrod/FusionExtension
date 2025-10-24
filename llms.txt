@@ -1,0 +1,18 @@
+# === Project docs (local files in this repo) ===
+file:README.md
+file:docs/schema.md
+file:docs/dev-notes.md
+file:schema.json
+
+# === Autodesk Fusion API (authoritative) ===
+https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/CAMIntroduction_UM.htm             # CAM API intro
+https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/CAM_generateToolpath.htm           # CAM.generateToolpath
+https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/PostProcessInput.htm               # PostProcessInput
+https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/NCProgram_postProcess.htm          # NCProgram.postProcess
+https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/PythonTemplate_UM.htm              # Python add-in template
+
+# === Helpful references / gotchas ===
+https://stackoverflow.com/questions/58181038/no-module-named-adsk-problem-python-script-for-autodesk-fusion-360   # adsk import pitfalls
+https://forums.autodesk.com/t5/fusion-api-and-scripts-forum/unable-to-run-any-scripts-module-not-found-error-adsk-core/td-p/12946004    # interpreter issues
+https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/CHS/Python-editor-not-launching-from-the-Fusion-360-Scripts-and-Add-Ins.html  # VS Code launcher fix
+https://github.com/TimPaterson/Fusion360-Batch-Post                                                                # batch posting patterns

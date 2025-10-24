@@ -1,0 +1,20 @@
+# Python dependencies for Fusion 360 Manufacturing Pipeline
+# 
+# For local development and testing:
+#   pip install -r requirements.txt
+#
+# For Fusion 360 deployment:
+#   Install to: %APPDATA%\Autodesk\Autodesk Fusion 360\API\Python\Lib\site-packages\
+#   Or vendor packages in src/vendor/
+
+# Schema validation
+jsonschema>=4.0.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Development tools (optional)
+black>=23.0.0  # Code formatting
+pylint>=2.0.0  # Linting
+mypy>=1.0.0    # Type checking

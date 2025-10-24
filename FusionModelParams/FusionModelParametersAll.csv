@@ -1,0 +1,29 @@
+Name,Unit,Expression,Value,Comments,Favorite
+component_height,in,96 in,96.00,height of the component in inches,true
+component_height_limited,in,min(96 in; max(72 in; component_height)),96.00,,false
+component_width,in,50 in,50.00,width of the component in inches,true
+component_width_limited,in,min(37.5 in; max(22 in; component_width)),37.50,,false
+component_floor_clearance,in,1 in,1.00,floor clearance of the component in inches,true
+component_floor_clearance_limited,in,min(12 in; max(1 in; component_floor_clearance)),1.00,,false
+door_hinging_right,,1,1,relative to room - 0 = False / 1 = True,true
+hole_radius,in,0.25 in,0.25,,false
+door_thickness,in,0.75 in,0.75,,false
+hole_margin_Top,in,1.72 in,1.72,,false
+hole_margin_bottom,in,1.72 in + if(( component_floor_clearance_limited == 1 in ) and not(door_wall_post_hinging); notching_z; 0 in),5.03,,false
+door_swinging_out,,1,1,relative to cabin - 0 = False / 1 = True,true
+door_wall_post_hinging,,0,0,0 = False / 1 = True,true
+door_wall_keep_latching,,0,0,0 = False / 1 = True,true
+notching_x,in,0.4414 in,0.441,,false
+notching_z,in,3.31 in,3.31,,false
+hinge_hole_space,in,1.5 in,1.50,,false
+hole_margin_side,in,0.968 in,0.968,,false
+hole_placement,in,if(door_drilling_left; hole_margin_side; component_width_limited - hole_margin_side),36.532,,false
+routing_width,in,0.3 in,0.30,,false
+routing_depth,in,0.5 in,0.50,,false
+hinge_hole_depth,in,0.5625 in,0.563,,false
+door_notching_left,,if(not(component_floor_clearance_limited == 1 in); 0; if(door_drilling_left and door_wall_post_hinging; 0; if(door_drilling_right and door_wall_keep_latching; 0; 1))),1,relative to front - 0 = False / 1 = True,false
+door_notching_right,,if(not(component_floor_clearance_limited == 1 in); 0; if(door_drilling_right and door_wall_post_hinging; 0; if(door_drilling_left and door_wall_keep_latching; 0; 1))),1,relative to front - 0 = False / 1 = True,false
+door_hinging_left_default,,not(door_hinging_right),0,relative to room - 0 = False / 1 = True,false
+door_swinging_in_default,,not(door_swinging_out),0,relative to cabin - 0 = False / 1 = True,false
+door_drilling_left,,if(door_hinging_left_default and door_swinging_out; 1; if(door_hinging_right and door_swinging_in_default; 1; 0)),0,relative to room - 0 = False / 1 = True,false
+door_drilling_right,,not(door_drilling_left),1,relative to room - 0 = False / 1 = True,false
